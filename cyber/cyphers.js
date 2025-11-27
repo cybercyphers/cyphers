@@ -18,9 +18,9 @@ let botMode = 'public';
 let allowedUsers = new Set();
 let onlineMode = false; // Will be set from config
 
-// === Load Config ===
+// === FIXED: Load Config from parent directory ===
 function loadConfig() {
-    const configPath = path.join(__dirname, 'config.json');
+    const configPath = path.join(__dirname, '..', 'config.json'); // CHANGED: Added '..'
     if (!fs.existsSync(configPath)) {
         console.log('❌ config.json not found!');
         process.exit(1);
@@ -50,7 +50,7 @@ function formatPhoneNumber(phone) {
     return phone.replace(/\D/g, '');
 }
 
-// === Load/Save Bot Settings ===
+// === FIXED: Load/Save Bot Settings with correct paths ===
 function loadBotSettings() {
     try {
         // Load bot mode from config
@@ -58,8 +58,8 @@ function loadBotSettings() {
         botMode = config.mode || 'public';
         onlineMode = config.online_status || false; // Load online status
 
-        // Load allowed users
-        const usersFile = path.join(__dirname, 'allowed_users.json');
+        // Load allowed users from parent directory
+        const usersFile = path.join(__dirname, '..', 'allowed_users.json'); // CHANGED: Added '..'
         if (fs.existsSync(usersFile)) {
             const users = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
             allowedUsers = new Set(users);
@@ -91,9 +91,9 @@ function setupPhoneNumber() {
     return formatPhoneNumber(phoneNumber);
 }
 
-// === Load Commands ===
+// === FIXED: Load Commands from parent directory ===
 const commands = new Map();
-const commandsPath = path.join(__dirname, 'commands');
+const commandsPath = path.join(__dirname, '..', 'commands'); // CHANGED: Added '..'
 
 function loadCommands() {
     try {
@@ -120,9 +120,9 @@ function loadCommands() {
     }
 }
 
-// === Load Handlers ===
+// === FIXED: Load Handlers from parent directory ===
 const handlers = new Map();
-const handlersPath = path.join(__dirname, 'handlers');
+const handlersPath = path.join(__dirname, '..', 'handlers'); // CHANGED: Added '..'
 
 function loadHandlers() {
     try {
@@ -216,10 +216,10 @@ function setupOnlineCommand() {
     });
 }
 
-// === Update online status in config.json ===
+// === FIXED: Update online status in config.json in parent directory ===
 async function updateConfigOnlineStatus(status) {
     try {
-        const configPath = path.join(__dirname, 'config.json');
+        const configPath = path.join(__dirname, '..', 'config.json'); // CHANGED: Added '..'
         const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
         
         // Update online status
