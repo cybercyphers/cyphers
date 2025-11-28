@@ -18,11 +18,13 @@ let botMode = 'public';
 let allowedUsers = new Set();
 let onlineMode = false; // Will be set from config
 
-// === FIXED: Load Config from parent directory ===
+// === Load Config ===
 function loadConfig() {
-    const configPath = path.join(__dirname, '..', 'config.json'); // CHANGED: Added '..'
+    // Go up one level from the 'cyber' folder to find config.json
+    const configPath = path.join(__dirname, '..', 'config.json');
     if (!fs.existsSync(configPath)) {
         console.log('❌ config.json not found!');
+        console.log('📁 Looking for config.json at:', configPath);
         process.exit(1);
     }
     
@@ -50,7 +52,7 @@ function formatPhoneNumber(phone) {
     return phone.replace(/\D/g, '');
 }
 
-// === FIXED: Load/Save Bot Settings with correct paths ===
+// === Load/Save Bot Settings ===
 function loadBotSettings() {
     try {
         // Load bot mode from config
@@ -58,8 +60,8 @@ function loadBotSettings() {
         botMode = config.mode || 'public';
         onlineMode = config.online_status || false; // Load online status
 
-        // Load allowed users from parent directory
-        const usersFile = path.join(__dirname, '..', 'allowed_users.json'); // CHANGED: Added '..'
+        // Load allowed users - go up one level to find allowed_users.json
+        const usersFile = path.join(__dirname, '..', 'allowed_users.json');
         if (fs.existsSync(usersFile)) {
             const users = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
             allowedUsers = new Set(users);
@@ -91,9 +93,10 @@ function setupPhoneNumber() {
     return formatPhoneNumber(phoneNumber);
 }
 
-// === FIXED: Load Commands from parent directory ===
+// === Load Commands ===
 const commands = new Map();
-const commandsPath = path.join(__dirname, '..', 'commands'); // CHANGED: Added '..'
+// Commands folder is in parent directory
+const commandsPath = path.join(__dirname, '..', 'commands');
 
 function loadCommands() {
     try {
@@ -120,9 +123,10 @@ function loadCommands() {
     }
 }
 
-// === FIXED: Load Handlers from parent directory ===
+// === Load Handlers ===
 const handlers = new Map();
-const handlersPath = path.join(__dirname, '..', 'handlers'); // CHANGED: Added '..'
+// Handlers folder is in parent directory
+const handlersPath = path.join(__dirname, '..', 'handlers');
 
 function loadHandlers() {
     try {
@@ -216,10 +220,11 @@ function setupOnlineCommand() {
     });
 }
 
-// === FIXED: Update online status in config.json in parent directory ===
+// === Update online status in config.json ===
 async function updateConfigOnlineStatus(status) {
     try {
-        const configPath = path.join(__dirname, '..', 'config.json'); // CHANGED: Added '..'
+        // Go up one level from the 'cyber' folder to find config.json
+        const configPath = path.join(__dirname, '..', 'config.json');
         const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
         
         // Update online status
